@@ -18,7 +18,8 @@ struct MenuInfo {
     }
 }
 
-class MenuViewController: UIViewController {
+class MenuViewController: UIViewController, MasterViewControllerDelegate {
+    
     
     
     @IBOutlet weak var menuCollectionView: UICollectionView!
@@ -29,6 +30,11 @@ class MenuViewController: UIViewController {
     var masterVc: MasterViewController?
     var currentIndex: Int = 0
 
+    func closeAll() {
+        self.navigationController?.popViewController(animated:true)
+    }
+
+    
     //View Life Cycle:
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +54,7 @@ class MenuViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "container" {
             self.masterVc = segue.destination as? MasterViewController
+            self.masterVc?.delegate = self
         }
     }
     
@@ -146,6 +153,8 @@ extension MenuViewController: UICollectionViewDelegate {
             }
         }
         collectionView.reloadData()
+      
+        
         masterVc?.segueIdentifierReceivedFromParent(identifier: self.segueIdentifiers[indexPath.row])
     }
 }

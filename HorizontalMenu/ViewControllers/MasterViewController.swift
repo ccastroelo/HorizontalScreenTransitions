@@ -7,8 +7,12 @@
 //
 
 import UIKit
-
-class MasterViewController: UIViewController {
+protocol MasterViewControllerDelegate {
+    func closeAll()
+}
+class MasterViewController: UIViewController, FirstViewControllerDelegate {
+    
+    var delegate : MasterViewControllerDelegate?
     
     private weak var guestViewController: UIViewController!
     private var containerViewObjects = [String: UIViewController]()
@@ -20,6 +24,10 @@ class MasterViewController: UIViewController {
     }
 
     private var segueIdentifier: String!
+    
+    func closeAll() {
+        delegate?.closeAll()
+    }
     
     //View Life Cycle:
     override func viewDidLoad() {
@@ -46,11 +54,20 @@ class MasterViewController: UIViewController {
                 }
             }
         }
-        
-        self.addChildViewController(guestViewController)
-        guestViewController.view.frame = CGRect(x: 0,y: 0, width: self.view.frame.width,height: self.view.frame.height)
-        self.view.addSubview(guestViewController.view)
-        guestViewController.didMove(toParentViewController: self)
+        if (self.segueIdentifier == "First"){
+             var auxVc = guestViewController as! FirstViewController
+            auxVc.delegate = self
+            self.addChildViewController(auxVc)
+            auxVc.view.frame = CGRect(x: 0,y: 0, width: self.view.frame.width,height: self.view.frame.height)
+            self.view.addSubview(auxVc.view)
+            auxVc.didMove(toParentViewController: self)
+        }else{
+            self.addChildViewController(guestViewController)
+            guestViewController.view.frame = CGRect(x: 0,y: 0, width: self.view.frame.width,height: self.view.frame.height)
+            self.view.addSubview(guestViewController.view)
+            guestViewController.didMove(toParentViewController: self)
+        }
+
     }
 }
 

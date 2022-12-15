@@ -7,9 +7,16 @@
 //
 
 import UIKit
-
+protocol FirstViewControllerDelegate {
+    func closeAll()
+}
 class FirstViewController: UIViewController {
 
+    var delegate : FirstViewControllerDelegate?
+    
+    @IBAction func close(_ sender: UIButton) {
+        delegate?.closeAll()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
     }
